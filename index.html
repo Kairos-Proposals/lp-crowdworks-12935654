@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kairos Proposal — PM/PMO・プロジェクト推進支援 | Walk To See 様</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-deep:#0B1E33;
+    --navy-mid:#132C45;
+    --navy-soft:#1F4258;
+    --steel:#6F8598;
+    --gold:#C9A227;
+    --gold-soft:#E4C568;
+    --paper:#F4F1E8;
+    --paper-dark:#E7E1D0;
+    --ink:#1B2733;
+    --ink-soft:#4B5A67;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Noto Sans JP', sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    line-height:1.85;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{
+    font-family:'Space Grotesk','Noto Sans JP',sans-serif;
+    letter-spacing:0.01em;
+  }
+  .mono{
+    font-family:'JetBrains Mono', monospace;
+  }
+  a{color:inherit;}
+  img{max-width:100%;}
+
+  /* ============ HERO ============ */
+  .hero{
+    position:relative;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(201,162,39,0.10), transparent 60%),
+      linear-gradient(180deg, var(--navy-deep) 0%, var(--navy-mid) 55%, var(--navy-soft) 100%);
+    color:var(--paper);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    padding:120px 24px 80px;
+  }
+  .grid-overlay{
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 64px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,0.045) 0px, rgba(255,255,255,0.045) 1px, transparent 1px, transparent 64px);
+    mask-image:radial-gradient(ellipse at center, black 40%, transparent 85%);
+    pointer-events:none;
+  }
+  .compass{
+    position:absolute;
+    top:50%; left:50%;
+    width:min(560px, 90vw);
+    height:min(560px, 90vw);
+    transform:translate(-50%,-50%);
+    pointer-events:none;
+  }
+  .compass-ring{
+    position:absolute; inset:0;
+    border-radius:50%;
+    border:1px solid rgba(201,162,39,0.28);
+  }
+  .compass-ring.mid{ inset:12%; border:1px dashed rgba(201,162,39,0.22); }
+  .compass-ring.inner{ inset:32%; border:1px solid rgba(201,162,39,0.16); }
+  .compass-needle{
+    position:absolute;
+    top:6%; left:50%;
+    width:2px; height:44%;
+    margin-left:-1px;
+    background:linear-gradient(to bottom, var(--gold) 0%, rgba(201,162,39,0) 100%);
+    transform-origin:bottom center;
+    animation:spin 40s linear infinite;
+  }
+  .compass-needle.rev{
+    animation:spinRev 55s linear infinite;
+    background:linear-gradient(to bottom, rgba(244,241,232,0.5) 0%, rgba(244,241,232,0) 100%);
+  }
+  @keyframes spin{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+  @keyframes spinRev{ from{transform:rotate(360deg);} to{transform:rotate(0deg);} }
+  .compass-dot{
+    position:absolute; top:50%; left:50%;
+    width:8px; height:8px; margin:-4px 0 0 -4px;
+    background:var(--gold);
+    border-radius:50%;
+    box-shadow:0 0 18px 4px rgba(201,162,39,0.5);
+  }
+  .compass-label{
+    position:absolute;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.2em;
+    color:rgba(244,241,232,0.55);
+  }
+  .compass-label.n{ top:-2%; left:50%; transform:translateX(-50%); }
+  .compass-label.s{ bottom:-2%; left:50%; transform:translateX(-50%); }
+  .compass-label.e{ right:-2%; top:50%; transform:translateY(-50%); }
+  .compass-label.w{ left:-2%; top:50%; transform:translateY(-50%); }
+
+  .hero-content{ position:relative; z-index:2; text-align:center; max-width:820px; }
+  .badge{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.18em;
+    color:var(--gold-soft);
+    border:1px solid rgba(201,162,39,0.4);
+    padding:6px 16px;
+    border-radius:999px;
+    margin-bottom:28px;
+  }
+  .hero h1{
+    font-size:clamp(28px, 5vw, 48px);
+    font-weight:700;
+    line-height:1.55;
+    margin-bottom:24px;
+    color:#FFFDF6;
+  }
+  .hero .lead{
+    font-size:15px;
+    color:rgba(244,241,232,0.78);
+    margin-bottom:40px;
+  }
+  .coordinates{
+    display:flex; flex-wrap:wrap;
+    gap:14px;
+    justify-content:center;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    color:rgba(244,241,232,0.5);
+  }
+  .coordinates span{
+    border:1px solid rgba(244,241,232,0.18);
+    padding:6px 14px;
+    border-radius:4px;
+  }
+  .scroll-hint{
+    position:absolute;
+    bottom:28px; left:50%; transform:translateX(-50%);
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.2em;
+    color:rgba(244,241,232,0.4);
+    z-index:2;
+  }
+
+  /* ============ SHARED SECTION HEAD ============ */
+  .section-head{
+    max-width:760px;
+    margin:0 auto 56px;
+    text-align:center;
+    padding:0 24px;
+  }
+  .tag{
+    display:inline-block;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.2em;
+    color:var(--gold);
+    margin-bottom:16px;
+  }
+  .section-head h2{
+    font-size:clamp(24px, 3.6vw, 34px);
+    font-weight:700;
+    line-height:1.6;
+    color:var(--ink);
+  }
+  .section-head.light h2, .section-head.light .tag{ color:var(--paper); }
+  .section-head.light .tag{ color:var(--gold-soft); }
+
+  /* ============ UNDERSTANDING ============ */
+  .understanding{
+    padding:120px 24px;
+    background:var(--paper);
+    position:relative;
+  }
+  .notes-grid{
+    max-width:1080px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:24px;
+  }
+  .note-card{
+    background:#fff;
+    border:1px solid var(--paper-dark);
+    border-left:4px solid var(--gold);
+    padding:32px 30px;
+    position:relative;
+  }
+  .note-card .mono{
+    font-size:11px;
+    letter-spacing:0.15em;
+    color:var(--steel);
+    display:block;
+    margin-bottom:14px;
+  }
+  .note-card h3{
+    font-size:18px;
+    margin-bottom:12px;
+    color:var(--navy-deep);
+  }
+  .note-card p{
+    font-size:14.5px;
+    color:var(--ink-soft);
+  }
+  .summary-line{
+    max-width:680px;
+    margin:64px auto 0;
+    text-align:center;
+    font-size:16px;
+    font-weight:500;
+    color:var(--navy-deep);
+    padding:28px 32px;
+    border-top:1px solid var(--paper-dark);
+    border-bottom:1px solid var(--paper-dark);
+  }
+
+  /* ============ VALUE ============ */
+  .value{
+    background:
+      radial-gradient(ellipse at 80% 0%, rgba(201,162,39,0.08), transparent 55%),
+      var(--navy-deep);
+    padding:120px 24px;
+  }
+  .value-grid{
+    max-width:1160px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+  }
+  .value-card{
+    background:rgba(244,241,232,0.03);
+    border:1px solid rgba(244,241,232,0.12);
+    padding:34px 26px;
+    transition:border-color .3s, transform .3s;
+  }
+  .value-card:hover{
+    border-color:rgba(201,162,39,0.5);
+    transform:translateY(-4px);
+  }
+  .value-card .pt{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    letter-spacing:0.15em;
+    color:var(--gold);
+    display:block;
+    margin-bottom:18px;
+  }
+  .value-icon{
+    width:36px; height:36px;
+    margin-bottom:18px;
+    position:relative;
+  }
+  .value-icon::before, .value-icon::after{
+    content:'';
+    position:absolute;
+    border:1.5px solid var(--gold-soft);
+  }
+  .icon-1::before{ width:36px; height:36px; border-radius:50%; }
+  .icon-1::after{ width:8px; height:8px; border-radius:50%; background:var(--gold); top:14px; left:14px; border:none; }
+  .icon-2::before{ width:36px; height:24px; top:6px; }
+  .icon-2::after{ width:24px; height:1.5px; background:var(--gold-soft); border:none; top:18px; left:6px; }
+  .icon-3::before{ width:30px; height:30px; transform:rotate(45deg); top:3px; left:3px; }
+  .icon-4::before{ width:26px; height:34px; top:1px; left:5px; }
+  .icon-4::after{ width:16px; height:1.5px; background:var(--gold-soft); border:none; top:14px; left:10px; box-shadow:0 6px 0 var(--gold-soft), 0 12px 0 var(--gold-soft); }
+  .icon-5::before{ width:14px; height:14px; border-radius:50%; top:2px; left:2px; }
+  .icon-5::after{ width:14px; height:14px; border-radius:50%; bottom:2px; right:2px; border-color:rgba(244,241,232,0.4); }
+
+  .value-card h3{
+    color:#FFFDF6;
+    font-size:18px;
+    margin-bottom:12px;
+    line-height:1.5;
+  }
+  .value-card p{
+    color:rgba(244,241,232,0.68);
+    font-size:14px;
+  }
+
+  /* ============ ROADMAP ============ */
+  .roadmap{
+    background:var(--paper);
+    padding:120px 24px 130px;
+  }
+  .timeline{
+    max-width:940px;
+    margin:0 auto;
+    position:relative;
+    padding-left:36px;
+  }
+  .timeline::before{
+    content:'';
+    position:absolute;
+    left:9px; top:6px; bottom:6px;
+    width:2px;
+    background:repeating-linear-gradient(to bottom, var(--gold) 0 6px, transparent 6px 12px);
+  }
+  .step{
+    position:relative;
+    padding-bottom:56px;
+  }
+  .step:last-child{ padding-bottom:0; }
+  .step::before{
+    content:'';
+    position:absolute;
+    left:-36px; top:2px;
+    width:20px; height:20px;
+    background:var(--paper);
+    border:2px solid var(--gold);
+    border-radius:50%;
+  }
+  .step .mono{
+    font-size:12px;
+    letter-spacing:0.15em;
+    color:var(--steel);
+    display:block;
+    margin-bottom:8px;
+  }
+  .step h3{
+    font-size:19px;
+    color:var(--navy-deep);
+    margin-bottom:10px;
+  }
+  .step p{
+    font-size:14.5px;
+    color:var(--ink-soft);
+    max-width:640px;
+  }
+
+  /* ============ CLOSING ============ */
+  .closing{
+    background:linear-gradient(160deg, var(--navy-deep), var(--navy-soft));
+    color:var(--paper);
+    padding:130px 24px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .closing::before{
+    content:'';
+    position:absolute;
+    width:900px; height:900px;
+    border:1px solid rgba(201,162,39,0.12);
+    border-radius:50%;
+    top:-450px; left:50%; transform:translateX(-50%);
+  }
+  .closing::after{
+    content:'';
+    position:absolute;
+    width:1300px; height:1300px;
+    border:1px solid rgba(201,162,39,0.07);
+    border-radius:50%;
+    top:-650px; left:50%; transform:translateX(-50%);
+  }
+  .closing h2{
+    position:relative;
+    font-size:clamp(24px, 4vw, 36px);
+    line-height:1.6;
+    margin-bottom:20px;
+    color:#FFFDF6;
+  }
+  .closing .lead{
+    position:relative;
+    max-width:600px;
+    margin:0 auto 44px;
+    color:rgba(244,241,232,0.72);
+    font-size:15px;
+  }
+  .cta{
+    position:relative;
+    display:inline-block;
+    background:var(--gold);
+    color:var(--navy-deep);
+    font-weight:700;
+    font-size:15px;
+    padding:18px 46px;
+    border-radius:999px;
+    text-decoration:none;
+    letter-spacing:0.05em;
+    transition:transform .25s, box-shadow .25s;
+    box-shadow:0 10px 30px rgba(201,162,39,0.25);
+  }
+  .cta:hover{ transform:translateY(-3px); box-shadow:0 14px 34px rgba(201,162,39,0.35); }
+
+  .meta-info{
+    position:relative;
+    margin-top:56px;
+    display:flex;
+    justify-content:center;
+    gap:40px;
+    flex-wrap:wrap;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:rgba(244,241,232,0.55);
+    letter-spacing:0.08em;
+  }
+  .meta-info div span{
+    display:block;
+    color:var(--gold-soft);
+    font-size:11px;
+    margin-bottom:6px;
+  }
+
+  footer{
+    background:var(--navy-deep);
+    color:rgba(244,241,232,0.4);
+    text-align:center;
+    padding:26px 24px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.15em;
+    border-top:1px solid rgba(244,241,232,0.08);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 860px){
+    .notes-grid{ grid-template-columns:1fr; }
+    .value-grid{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width: 600px){
+    .hero{ padding:100px 20px 70px; }
+    .value-grid{ grid-template-columns:1fr; }
+    .understanding, .value, .roadmap{ padding:80px 20px; }
+    .closing{ padding:90px 20px; }
+    .timeline{ padding-left:30px; }
+    .meta-info{ gap:24px; flex-direction:column; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ HERO ============ -->
+  <header class="hero">
+    <div class="grid-overlay"></div>
+    <div class="compass" aria-hidden="true">
+      <div class="compass-ring outer"></div>
+      <div class="compass-ring mid"></div>
+      <div class="compass-ring inner"></div>
+      <div class="compass-needle"></div>
+      <div class="compass-needle rev"></div>
+      <div class="compass-dot"></div>
+      <span class="compass-label n">N ／ 進捗</span>
+      <span class="compass-label e">E ／ 課題</span>
+      <span class="compass-label s">S ／ 実行</span>
+      <span class="compass-label w">W ／ 合意</span>
+    </div>
+    <div class="hero-content">
+      <span class="badge">KAIROS PROPOSAL — FOR WALK TO SEE</span>
+      <h1>霧の中のプロジェクトに、<br>歩いて確かめた航路を。</h1>
+      <p class="lead">大規模システム開発・DX推進プロジェクトにおける<br>PM／PMO支援業務のご提案です。</p>
+      <div class="coordinates">
+        <span class="mono">PROGRESS：可視化</span>
+        <span class="mono">RISK：早期検知</span>
+        <span class="mono">STAKEHOLDER：調整</span>
+      </div>
+    </div>
+    <div class="scroll-hint mono">SCROLL ▾</div>
+  </header>
+
+  <!-- ============ UNDERSTANDING ============ -->
+  <section class="understanding">
+    <div class="section-head">
+      <span class="tag">FIELD NOTES — 現在地の観測</span>
+      <h2>大規模プロジェクトの現場で、<br>いま起きていること。</h2>
+    </div>
+    <div class="notes-grid">
+      <div class="note-card">
+        <span class="mono">OBS. 01</span>
+        <h3>進捗が「見えない」まま進む</h3>
+        <p>ベンダー・複数チームが並走する中、全体の進捗・課題・リスクが一元的に把握できず、意思決定が後手に回りやすい状態。</p>
+      </div>
+      <div class="note-card">
+        <span class="mono">OBS. 02</span>
+        <h3>会議体が意思決定の場になっていない</h3>
+        <p>ステアリングコミッティや定例会が報告の場に留まり、議事録・アクションの管理が属人化してしまうケース。</p>
+      </div>
+      <div class="note-card">
+        <span class="mono">OBS. 03</span>
+        <h3>ベンダーとの温度差</h3>
+        <p>複数ベンダーが関わる基幹刷新・クラウド移行では、利害調整と折衝に稼働が割かれ、推進スピードが落ちがちです。</p>
+      </div>
+      <div class="note-card">
+        <span class="mono">OBS. 04</span>
+        <h3>資料作成に忙殺される推進担当</h3>
+        <p>計画書・報告資料の作成に工数が取られ、本来注力すべき課題解決やステークホルダー調整に時間が割けない。</p>
+      </div>
+    </div>
+    <p class="summary-line">見取り図のないまま突き進む現場には、実際に歩いて確かめ、記録し、伴走するPMOが必要です。Kairosは「Walk To See」という名にふさわしい、現場密着型の推進支援をご提案します。</p>
+  </section>
+
+  <!-- ============ VALUE ============ -->
+  <section class="value">
+    <div class="section-head light">
+      <span class="tag">WHAT KAIROS BRINGS</span>
+      <h2>Kairosが提供する、<br>5つの伴走価値</h2>
+    </div>
+    <div class="value-grid">
+      <div class="value-card">
+        <span class="pt mono">PT.01</span>
+        <div class="value-icon icon-1"></div>
+        <h3>進捗・課題・リスクの一元可視化</h3>
+        <p>進捗管理表・課題管理表・リスク管理表を統合的に運用し、「今どこにいるか」を関係者全員が同じ地図で共有できる状態に整えます。</p>
+      </div>
+      <div class="value-card">
+        <span class="pt mono">PT.02</span>
+        <div class="value-icon icon-2"></div>
+        <h3>会議体運営とファシリテーション</h3>
+        <p>定例会・ステアリングコミッティの設計から進行、議事録作成までを巻き取り、会議を「決める場」へと再設計します。</p>
+      </div>
+      <div class="value-card">
+        <span class="pt mono">PT.03</span>
+        <div class="value-icon icon-3"></div>
+        <h3>ベンダーコントロール・折衝</h3>
+        <p>複数ベンダー・関係各所の利害を調整し、開発の推進力を落とさないコミュニケーション設計と交渉を担います。</p>
+      </div>
+      <div class="value-card">
+        <span class="pt mono">PT.04</span>
+        <div class="value-icon icon-4"></div>
+        <h3>論理的なドキュメンテーション</h3>
+        <p>プロジェクト計画書や経営層向け報告資料を、論理構成の明快な資料として整備し、意思決定のスピードを高めます。</p>
+      </div>
+      <div class="value-card">
+        <span class="pt mono">PT.05</span>
+        <div class="value-icon icon-5"></div>
+        <h3>ステークホルダー調整のハブ機能</h3>
+        <p>現場の開発チームから経営層まで、立場や温度差の異なる関係者をつなぐ結節点として、プロジェクト全体を推進します。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ROADMAP ============ -->
+  <section class="roadmap">
+    <div class="section-head">
+      <span class="tag">HOW WE WALK — 進め方</span>
+      <h2>現在地の把握から、<br>継続的な伴走まで。</h2>
+    </div>
+    <div class="timeline">
+      <div class="step">
+        <span class="mono">STEP 01 ／ 1週目</span>
+        <h3>現在地の把握</h3>
+        <p>キックオフ・既存資料のインプット、体制やこれまでの進め方をヒアリングし、プロジェクトの現在地を正確に把握します。</p>
+      </div>
+      <div class="step">
+        <span class="mono">STEP 02 ／ 2〜3週目</span>
+        <h3>航路の設計</h3>
+        <p>進捗・課題・リスク管理の型、会議体の構成、報告フォーマットを設計し、推進体制の土台をつくります。</p>
+      </div>
+      <div class="step">
+        <span class="mono">STEP 03 ／ 1ヶ月目〜</span>
+        <h3>伴走の開始</h3>
+        <p>PMOとして稼働を開始。週次での進捗管理、課題・リスクのフォロー、ベンダーとの折衝を継続的に実施します。</p>
+      </div>
+      <div class="step">
+        <span class="mono">STEP 04 ／ 継続</span>
+        <h3>定点観測とレポーティング</h3>
+        <p>月次・週次でのレポーティングを通じてリスクを早期に検知し、必要に応じて是正のアクションを提案します。</p>
+      </div>
+      <div class="step">
+        <span class="mono">STEP 05 ／ マイルストーン毎</span>
+        <h3>到達点の確認</h3>
+        <p>フェーズ完了時に振り返りを実施し、得られた知見を次フェーズの計画に反映。継続的に推進の質を高めていきます。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CLOSING ============ -->
+  <section class="closing">
+    <h2>次の一歩を、<br>ともに測量しませんか。</h2>
+    <p class="lead">まずは30分ほど、プロジェクトの現在地とお困りごとをお聞かせください。<br>スキル要件への回答（〇／△／✕）と職務経歴書をご用意のうえ、Web面談にてご説明いたします。</p>
+    <a href="#" class="cta">面談日程を相談する</a>
+    <div class="meta-info">
+      <div><span>単価目安</span>70万円〜100万円 ／ 月</div>
+      <div><span>稼働時間</span>平日 9:00-18:00（フレックス）</div>
+      <div><span>稼働場所</span>リモート中心／案件により関東・関西へ出向あり</div>
+    </div>
+  </section>
+
+  <footer>
+    KAIROS — Web制作・システム開発チーム ／ PROPOSAL FOR WALK TO SEE
+  </footer>
+
+</body>
+</html>
